@@ -1,0 +1,56 @@
+name: "[Dispatch] Create Plugin Template"
+
+on:
+  workflow_dispatch:
+    resource_type:
+      description: 'plugin type ex) (inventory.Collector, cost-analysis.DataSource, monitoring.Webhook, notification.Notification ...)'
+      required: true
+      default: 'inventory.Collector'
+    core-version:
+      description: 'core version'
+      required: true
+      default: '2.0'
+
+jobs:
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: set git user
+        run: git config --global user.email admin@forest-extension
+
+      - name: set python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: install requirements
+        run: pip install --upgrade -r pkg/pip_requirements.txt
+
+      - name: set PAT_TOKEN env
+        run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
+
+      - name: create template with topics
+        run: |
+          python src/main.py template --dest ${{ github.repository }} --resource_type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+
+      - name: extract service from resource type to lower case
+        run: |
+          echo "SERVICE=$(echo ${{ github.event.inputs.resource_type }} | cut -d '.' -f1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: install spaceone package
+        run: |
+          pip install --upgrade spaceone-core
+          pip install --upgrade --pre spaceone-${{ SERVICE }}}
+
+      - name: create plugin template
+        run: |
+          spaceone create-project -s spaceone.${{ SERVICE }}.plugin.collector.skeleton src/plugin
+
+      - name: Push template to master
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "[ CI ] Template has been built"
+          commit_user_name: forest-extension-admin
+          commit_user_email: admin@forest-extension
+          commit_author: forest-extension-admin <admin@forest-extension>

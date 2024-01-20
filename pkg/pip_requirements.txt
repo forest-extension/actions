@@ -1,0 +1,4 @@
+click
+PyGithub
+PyYAML
+Jinja2
