@@ -70,10 +70,17 @@ jobs:
         run: |
           spaceone create-project -s spaceone.$SPACEONE_SERVICE.plugin.$SPACEONE_RESOURCE.skeleton ${{ github.event.inputs.dest }}/src/plugin
 
-      - name: push changes
+      - name: commit changes
         run: |
           cd ${{ github.event.inputs.dest }}
-          git config --global user.email admin@forest-extension
+          git config user.email github-actions@github.com
+          git config user.name github-actions
           git add .
           git commit -m "[CI] Create plugin template"
-          git push origin master
+
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          repository: forest-extension/${{ github.event.inputs.dest }}
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: master
