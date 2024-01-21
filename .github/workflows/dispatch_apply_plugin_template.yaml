@@ -77,4 +77,4 @@ jobs:
           git config user.name github-actions
           git add .
           git commit -m "[CI] Create plugin template"
-          git push origin master
+          git push -f origin master
