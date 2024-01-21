@@ -32,4 +32,4 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: ${{ env.REPO }}
           workflow: ${{ env.WORKFLOW_NAME }}
-          inputs: '{"dest" : "${{ github.event.repository.name }}"}'
+          inputs: '{"dest" : "${{ github.event.repository.name }}", "resource_type" : "${{ github.event.inputs.resource_type }}", "core-version" : "${{ github.event.inputs.core-version }}"}'
