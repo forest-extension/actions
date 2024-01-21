@@ -59,6 +59,7 @@ jobs:
 
       - name: install spaceone package
         run: |
+          pip install --upgrade pip
           pip install --upgrade spaceone-core
           pip install --upgrade --pre spaceone-$PLUGIN_PACKAGE
 
