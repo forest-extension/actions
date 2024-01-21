@@ -71,11 +71,14 @@ jobs:
         run: |
           spaceone create-project -s spaceone.$SPACEONE_SERVICE.plugin.$SPACEONE_RESOURCE.skeleton src/plugin
 
-      - name: commit changes
-        uses: EndBug/add-and-commit@v7
+      - name: Push plugin template to master
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          add: '.'
-          author_name: github-actions
+          commit_message: "[CI] Plugin template has been built"
+          commit_user_name: forest-extension-admin
+          commit_user_email: admin@forest-extension
+          commit_author: forest-extension-admin <admin@forest-extension>
+          push_options: '--force'
 
       - name: push changes
         uses: ad-m/github-push-action@master
