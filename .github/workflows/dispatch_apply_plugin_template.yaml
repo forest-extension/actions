@@ -1,0 +1,65 @@
+name: "[Dispatch] Create Plugin Template"
+
+on:
+  workflow_dispatch:
+    inputs:
+      dest:
+        description: 'target repository ({repository_name})'
+        required: true
+      resource_type:
+        description: 'plugin type ex) (inventory.Collector, cost-analysis.DataSource, monitoring.Webhook, notification.Notification ...)'
+        required: true
+        default: 'inventory.Collector'
+      core-version:
+        description: 'core version'
+        required: true
+        default: '2.0'
+
+jobs:
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: set git user
+        run: git config --global user.email admin@forest-extension
+
+      - name: set python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: install requirements
+        run: pip install --upgrade -r pkg/pip_requirements.txt
+
+      - name: set PAT_TOKEN env
+        run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
+
+      - name: create template with topics
+        run: |
+          python src/main.py template --dest ${{ github.repository }} --resource_type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+
+      - name: extract service from resource type to lower case
+        run: |
+          echo "SERVICE=$(echo ${{ github.event.inputs.resource_type }} | cut -d '.' -f1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: install spaceone package
+        run: |
+          pip install --upgrade spaceone-core
+          pip install --upgrade --pre spaceone-$SERVICE
+
+      - name: Use Environment Variable
+        # Replace '-' with '_' in the SERVICE environment variable
+        run: echo "SERVICE=${SERVICE//-/_}" >> $GITHUB_ENV
+
+      - name: create plugin template
+        run: |
+          spaceone create-project -s spaceone.$SERVICE.plugin.collector.skeleton temp/src/plugin
+
+      - name: Push plugin template to repository
+        uses: andstor/copycat-action@v3
+        with:
+          personal_token: ${{ secrets.PAT_TOKEN }}
+          src_path: temp/src/.
+          dst_path: src/.
+          dst_owner: forest-extension
+          dst_repo_name: ${{ github.event.inputs.dest }}
