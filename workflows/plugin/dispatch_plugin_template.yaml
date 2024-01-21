@@ -11,6 +11,9 @@ on:
         description: 'core version'
         required: true
         default: '2.0'
+env:
+  REPO: forest-extension/actions
+  WORKFLOW_NAME: dispatch_apply_plugin_template.yaml
 
 jobs:
   pull_plugin_template:
