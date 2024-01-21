@@ -35,17 +35,16 @@ jobs:
       - name: git clone actions repository
         run: |
           git clone https://github.com/forest-extension/actions.git
-          cd actions
 
       - name: install requirements
-        run: pip install --upgrade -r pkg/pip_requirements.txt
+        run: pip install --upgrade -r actions/pkg/pip_requirements.txt
 
       - name: set PAT_TOKEN env
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
 
       - name: create template with topics
         run: |
-          python src/main.py template --dest ${{  github.repository }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+          python actions/src/main.py template --dest ${{  github.repository }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
 
       - name: extract service from resource type to lower case
         run: |
