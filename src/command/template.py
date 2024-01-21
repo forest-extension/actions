@@ -23,7 +23,7 @@ def run_template(**params):
     service, resource = resource_type.lower().split(".")
 
     # Create Topics
-    topics = [service, resource]
+    topics = [service, resource, workflow_type]
     topics.extend(github_connector.get_topics(destination))
     topics = list(set(topics))
     github_connector.create_topic(destination, topics)
