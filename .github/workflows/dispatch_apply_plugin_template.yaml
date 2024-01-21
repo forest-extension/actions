@@ -80,8 +80,6 @@ jobs:
 
       - name: commit changes
         run: |
-          git config --global user.email github-actions@github.com
-          git config --global user.name github-actions
           git add .
           git commit -m "[CI] Create plugin template"
 
