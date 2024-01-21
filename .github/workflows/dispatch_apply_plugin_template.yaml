@@ -68,7 +68,7 @@ jobs:
       - name: push changes
         run: |
           cd ${{ github.event.inputs.dest }}
-          git config user.name admin@forest-extension 
+          git config user.name github-actions
           git config user.email admin@forest-extension
           git add .
           git commit -m "[CI] Create plugin template"
