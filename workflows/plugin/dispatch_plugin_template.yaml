@@ -16,7 +16,7 @@ jobs:
   template:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v3
       - name: set git user
         run: git config --global user.email admin@forest-extension
 
