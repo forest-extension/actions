@@ -16,6 +16,12 @@ env:
   WORKFLOW_NAME: dispatch_apply_plugin_template.yaml
 
 jobs:
+  owner_check:
+    if: github.repository_owner == 'forest-extension'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.repository_owner }}
+
   pull_plugin_template:
     runs-on: ubuntu-latest
     needs: owner_check
