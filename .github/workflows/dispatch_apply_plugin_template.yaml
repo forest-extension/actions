@@ -51,20 +51,24 @@ jobs:
 
       - name: extract service from resource type to lower case
         run: |
-          echo "SERVICE=$(echo ${{ github.event.inputs.resource_type }} | cut -d '.' -f1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "PLUGIN_PACKAGE=$(echo ${{ github.event.inputs.resource_type }} | cut -d '.' -f1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: extract resource from resource type to lower case
+        run: |
+          echo "SPACEONE_RESOURCE=$(echo ${{ github.event.inputs.resource_type }} | cut -d '.' -f2 | sed 's/\([a-z0-9]\)\([A-Z]\)/\1_\2/g'| tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: install spaceone package
         run: |
           pip install --upgrade spaceone-core
-          pip install --upgrade --pre spaceone-$SERVICE
+          pip install --upgrade --pre spaceone-$PLUGIN_PACKAGE
 
       - name: Use Environment Variable
         # Replace '-' with '_' in the SERVICE environment variable
-        run: echo "SERVICE=${SERVICE//-/_}" >> $GITHUB_ENV
+        run: echo "SPACEONE_SERVICE=${PLUGIN_PACKAGE//-/_}" >> $GITHUB_ENV
 
       - name: create plugin template
         run: |
-          spaceone create-project -s spaceone.$SERVICE.plugin.collector.skeleton ${{ github.event.inputs.dest }}/src/plugin
+          spaceone create-project -s spaceone.$SPACEONE_SERVICE.plugin.$SPACEONE_RESOURCE.skeleton ${{ github.event.inputs.dest }}/src/plugin
 
       - name: push changes
         run: |
