@@ -13,6 +13,12 @@ on:
         default: 'plugin'
 
 jobs:
+  owner_check:
+    if: github.repository_owner == 'forest-extension'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.repository_owner }}
+
   deploy:
     runs-on: ubuntu-latest
     steps:

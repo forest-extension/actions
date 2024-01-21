@@ -16,6 +16,12 @@ on:
         default: '2.0'
 
 jobs:
+  owner_check:
+    if: github.repository_owner == 'forest-extension'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.repository_owner }}
+
   template:
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +39,10 @@ jobs:
 
       - name: set PAT_TOKEN env
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
+
+      - name: git clone dest repository
+        run: |
+          git clone https://github.com/forest-extension/${{ github.event.inputs.dest }}.git
 
       - name: create template with topics
         run: |
@@ -53,13 +63,13 @@ jobs:
 
       - name: create plugin template
         run: |
-          spaceone create-project -s spaceone.$SERVICE.plugin.collector.skeleton temp/src/plugin
+          spaceone create-project -s spaceone.$SERVICE.plugin.collector.skeleton ${{ github.event.inputs.dest }}/src/plugin
 
-      - name: Push plugin template to repository
-        uses: andstor/copycat-action@v3
-        with:
-          personal_token: ${{ secrets.PAT_TOKEN }}
-          src_path: temp/src/.
-          dst_path: src/.
-          dst_owner: forest-extension
-          dst_repo_name: ${{ github.event.inputs.dest }}
+      - name: push changes
+        run: |
+          cd ${{ github.event.inputs.dest }}
+          git config user.name admin@forest-extension 
+          git config user.email admin@forest-extension
+          git add .
+          git commit -m "[CI] Create plugin template"
+          git push origin master
