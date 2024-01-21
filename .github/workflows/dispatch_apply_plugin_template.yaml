@@ -79,9 +79,10 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: commit changes
-        run: |
-          git add .
-          git commit -m "[CI] Create plugin template"
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'temp'
+          author_name: github-actions
 
       - name: push changes
         uses: ad-m/github-push-action@master
