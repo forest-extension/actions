@@ -23,6 +23,7 @@ jobs:
       - run: echo ${{ github.repository_owner }}
 
   template:
+    needs: owner_check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
