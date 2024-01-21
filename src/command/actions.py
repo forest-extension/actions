@@ -30,8 +30,7 @@ def _update_workflow(github_connector, destination, workflow):
                 continue
 
             try:
-                pass
-                # github_connector.update_file(destination, path, content)
+                github_connector.update_file(destination, path, content)
             except Exception as e:
                 logging.error(
                     f"[{destination}] Failed to update {path} to {destination} : {e}"
@@ -40,7 +39,7 @@ def _update_workflow(github_connector, destination, workflow):
         else:
             try:
                 logging.info(f"[{destination}] Try to create {path} to {destination}")
-                # github_connector.create_file(destination, path, content)
+                github_connector.create_file(destination, path, content)
             except Exception as e:
                 logging.error(
                     f"[{destination}] Failed to create {path} to {destination} : {e}"
