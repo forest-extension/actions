@@ -79,4 +79,10 @@ jobs:
           git config --global user.name github-actions
           git add .
           git commit -m "[CI] Create plugin template"
-          git push -f origin master
+      
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          repository: forest-extension/${{ github.event.inputs.dest }}
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: master
