@@ -2,14 +2,15 @@ name: "[Dispatch] Create Plugin Template"
 
 on:
   workflow_dispatch:
-    resource_type:
-      description: 'plugin type ex) (inventory.Collector, cost-analysis.DataSource, monitoring.Webhook, notification.Notification ...)'
-      required: true
-      default: 'inventory.Collector'
-    core-version:
-      description: 'core version'
-      required: true
-      default: '2.0'
+    inputs:
+      resource_type:
+        description: 'plugin type ex) (inventory.Collector, cost-analysis.DataSource, monitoring.Webhook, notification.Notification ...)'
+        required: true
+        default: 'inventory.Collector'
+      core-version:
+        description: 'core version'
+        required: true
+        default: '2.0'
 
 jobs:
   template:
