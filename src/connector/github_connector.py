@@ -107,3 +107,5 @@ class GithubConnector:
         file_vo = self.get_file(destination, path)
         if file_vo is None:
             return None
+
+        return file_vo.decoded_content.decode("utf-8")
