@@ -47,7 +47,7 @@ jobs:
 
       - name: create template with topics
         run: |
-          python actions/src/main.py template --dest ${{  github.repository }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+          python actions/src/main.py template --dest ${{  github.repository_name }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
 
       - name: extract service from resource type to lower case
         run: |
@@ -74,20 +74,12 @@ jobs:
         run: |
           spaceone create-project -s spaceone.${{ env.SPACEONE_SERVICE }}.plugin.${{ env.SPACEONE_RESOURCE }}.skeleton src/plugin
 
-
       - name: Push plugin template to master
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-
           commit_message: "[CI] Plugin template has been built"
           commit_user_name: forest-extension-admin
           commit_user_email: admin@forest-extension
           commit_author: forest-extension-admin <admin@forest-extension>
           push_options: '--force'
 
-      - name: push changes
-        uses: ad-m/github-push-action@master
-        with:
-          repository: forest-extension/${{ github.repository }}
-          github_token: ${{ secrets.PAT_TOKEN }}
-          branch: master
