@@ -47,7 +47,8 @@ jobs:
 
       - name: create template with topics
         run: |
-          python actions/src/main.py template --dest ${{  github.repository.name }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+          echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d '/' -f2)" >> $GITHUB_ENV
+          python actions/src/main.py template --dest ${{  env.REPO_NAME }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
 
       - name: extract service from resource type to lower case
         run: |
