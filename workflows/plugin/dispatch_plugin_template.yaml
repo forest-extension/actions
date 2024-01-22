@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: forest-extension/${{ github.event.inputs.dest }}
+          repository: forest-extension/${{ github.repository }}
           token: ${{ secrets.PAT_TOKEN }}
       - name: set git user
         run: git config --global user.email admin@forest-extension
@@ -88,6 +88,6 @@ jobs:
       - name: push changes
         uses: ad-m/github-push-action@master
         with:
-          repository: forest-extension/${{ github.event.inputs.dest }}
+          repository: forest-extension/${{ github.repository }}
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: master
