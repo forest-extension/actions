@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: forest-extension/${{ github.repository }}
+          repository: ${{ github.repository }}
           token: ${{ secrets.PAT_TOKEN }}
       - name: set git user
         run: git config --global user.email admin@forest-extension
