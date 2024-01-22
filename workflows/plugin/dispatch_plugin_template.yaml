@@ -42,13 +42,13 @@ jobs:
       - name: install requirements
         run: pip install --upgrade -r actions/pkg/pip_requirements.txt
 
-      - name: set PAT_TOKEN env
-        run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
+      - name: set REPO_NAME env
+        run: |
+          echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d '/' -f2)" >> $GITHUB_ENV
 
       - name: create template with topics
         run: |
-          echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d '/' -f2)" >> $GITHUB_ENV
-          python actions/src/main.py template --dest ${{  env.REPO_NAME }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
+          python actions/src/main.py template --dest ${{ env.REPO_NAME }} --resource-type ${{ github.event.inputs.resource_type }} --core-version ${{ github.event.inputs.core-version }}
 
       - name: extract service from resource type to lower case
         run: |
