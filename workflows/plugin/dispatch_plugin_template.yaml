@@ -23,7 +23,9 @@ jobs:
     needs: owner_check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
       - name: set git user
         run: git config --global user.email admin@forest-extension
 
@@ -71,9 +73,11 @@ jobs:
         run: |
           spaceone create-project -s spaceone.${{ env.SPACEONE_SERVICE }}.plugin.${{ env.SPACEONE_RESOURCE }}.skeleton src/plugin
 
+
       - name: Push plugin template to master
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
+
           commit_message: "[CI] Plugin template has been built"
           commit_user_name: forest-extension-admin
           commit_user_email: admin@forest-extension
