@@ -86,4 +86,5 @@ jobs:
           commit_user_name: forest-extension-admin
           commit_user_email: admin@forest-extension
           commit_author: forest-extension-admin <admin@forest-extension>
+          push_options: '--force'
 
